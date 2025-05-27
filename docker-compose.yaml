@@ -1,0 +1,23 @@
+services:
+  # コンテナのなまえ
+  paddle:
+    # Dockerfileからビルドしたイメージに名前を付けられる
+    image: "paddlepaddle/paddle:3.0.0-gpu-cuda12.6-cudnn9.5-trt10.5"
+    shm_size: '8gb'
+    volumes:
+      - ./:/workspace
+    deploy:
+      resources:
+        limits:
+          memory: 8G
+        reservations:
+          memory: 4G
+          devices:
+            - driver: nvidia
+              count: 1
+              # gpuのアクセス権限
+              capabilities: [gpu]
+    environment:
+      # Enable this to use the GPU
+      - NVIDIA_VISIBLE_DEVICES=all
+    stdin_open: true
